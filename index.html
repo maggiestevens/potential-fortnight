@@ -72,7 +72,7 @@
         <!-- Time & Date with Penguin Icon -->
         <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <div class="p-3 bg-gradient-to-tr from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-inner">     
-                <i class="fa-solid fa-penguin text-3xl text-cyan-400"></i>     
+                <i class="fa-solid fa-kiwi text-3xl text-cyan-400"></i>     
             </div>
             <div>
                 <div id="clock-display" class="font-mono text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-none">
@@ -102,7 +102,7 @@
     <!-- MAIN GRID CONTAINER -->
     <main class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1 w-full">
 
-        <!-- LEFT COLUMN: RECIPE CARD & CALENDAR (6 Cols) -->
+        <!-- LEFT COLUMN: RECIPE CARD & Timers (6 Cols) -->
         <section class="lg:col-span-6 flex flex-col gap-5">
             
             <!-- MAGGIE'S RECIPE BOOK CARD -->
@@ -144,7 +144,29 @@
                     </div>
                 </div>
 
-                <!-- GOOGLE EMBED CONTAINER (VISIBILITY FIXED) -->
+                <section class="lg:col-span-6 flex flex-col">
+            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-stopwatch text-orange-500 text-lg"></i>
+                        <h2 class="text-lg font-bold text-neutral-100">Kitchen Timers</h2>
+                    </div>
+                    <button onclick="openAddTimerModal()" class="bg-orange-500 hover:bg-orange-400 text-neutral-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-colors shadow-lg shadow-orange-500/10">
+                        <i class="fa-solid fa-plus"></i> Set Custom Timer
+                    </button>
+                </div>
+
+                <!-- Timers Dynamic Container -->
+                <div id="timers-list" class="space-y-3 flex-1 overflow-y-auto max-h-[450px] pr-1">
+                    <!-- Timer cards injected here via JS -->
+                </div>
+            </div>
+        </section>
+
+                
+
+        <!-- RIGHT COLUMN: Calendar (6 Cols) -->
+        <!-- GOOGLE EMBED CONTAINER (VISIBILITY FIXED) -->
                 <div id="calendar-embed-content" class="flex-1 flex flex-col">
                     <div class="mb-2">
                         <div class="flex gap-2">
@@ -161,26 +183,6 @@
                     </div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- RIGHT COLUMN: MULTI-TIMER SYSTEM (6 Cols) -->
-        <section class="lg:col-span-6 flex flex-col">
-            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-stopwatch text-orange-500 text-lg"></i>
-                        <h2 class="text-lg font-bold text-neutral-100">Kitchen Timers</h2>
-                    </div>
-                    <button onclick="openAddTimerModal()" class="bg-orange-500 hover:bg-orange-400 text-neutral-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-colors shadow-lg shadow-orange-500/10">
-                        <i class="fa-solid fa-plus"></i> Set Custom Timer
-                    </button>
-                </div>
-
-                <!-- Timers Dynamic Container -->
-                <div id="timers-list" class="space-y-3 flex-1 overflow-y-auto max-h-[450px] pr-1">
-                    <!-- Timer cards injected here via JS -->
-                </div>
             </div>
         </section>
     </main>
