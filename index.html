@@ -69,7 +69,7 @@
 
     <!-- TOP HEADER / DASHBOARD BAR -->
     <header class="w-full bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-6 mb-4 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
-        <!-- Time & Date with Penguin Icon -->
+        <!-- Time & Date with Penguin/Kiwi Icon -->
         <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <div class="p-3 bg-gradient-to-tr from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-inner">     
                 <i class="fa-solid fa-kiwi text-3xl text-cyan-400"></i>     
@@ -102,7 +102,7 @@
     <!-- MAIN GRID CONTAINER -->
     <main class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1 w-full">
 
-        <!-- LEFT COLUMN: RECIPE CARD & Timers (6 Cols) -->
+        <!-- LEFT COLUMN: RECIPE CARD & TIMERS (6 Cols) -->
         <section class="lg:col-span-6 flex flex-col gap-5">
             
             <!-- MAGGIE'S RECIPE BOOK CARD -->
@@ -135,8 +135,8 @@
                 </div>
             </div>
 
-        
-            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col">
+            <!-- KITCHEN TIMERS CARD -->
+            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col min-h-[350px]">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-stopwatch text-orange-500 text-lg"></i>
@@ -154,11 +154,10 @@
             </div>
         </section>
 
-                
-
-        <!-- RIGHT COLUMN: Calendar (6 Cols) -->
-         <!-- GOOGLE CALENDAR CARD -->
-            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col min-h-[350px]">
+        <!-- RIGHT COLUMN: CALENDAR (6 Cols) -->
+        <section class="lg:col-span-6 flex flex-col">
+            <!-- GOOGLE CALENDAR CARD -->
+            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col min-h-[500px]">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-calendar-days text-cyan-400 text-lg"></i>
@@ -166,27 +165,24 @@
                     </div>
                 </div>
 
-                <section class="lg:col-span-6 flex flex-col">
-        <!-- GOOGLE EMBED CONTAINER (VISIBILITY FIXED) -->
-        
                 <div id="calendar-embed-content" class="flex-1 flex flex-col">
-                    <div class="mb-2">
+                    <div class="mb-3">
                         <div class="flex gap-2">
-                            <input type="text" id="gcal-url-input" placeholder="Paste Google Calendar Embed URL (e.g. https://calendar.google.com/calendar/embed?...)" class="flex-1 bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-cyan-500">
-                            <button onclick="saveGCalUrl()" class="bg-cyan-600 hover:bg-cyan-500 text-neutral-950 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-colors">Save</button>
+                            <input type="text" id="gcal-url-input" placeholder="Paste Google Calendar Embed URL (e.g. https://calendar.google.com/calendar/embed?...)" class="flex-1 bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-cyan-500">
+                            <button onclick="saveGCalUrl()" class="bg-cyan-600 hover:bg-cyan-500 text-neutral-950 font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Save</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-neutral-950 rounded-xl overflow-hidden border border-neutral-800 min-h-[220px]">
-                        <iframe id="gcal-iframe" src="" class="w-full h-full border-none hidden"></iframe>
-                        <div id="gcal-placeholder" class="h-full min-h-[200px] flex flex-col items-center justify-center p-6 text-center text-neutral-500">
+                    <div class="flex-1 bg-neutral-950 rounded-xl overflow-hidden border border-neutral-800 min-h-[380px] relative">
+                        <iframe id="gcal-iframe" src="" class="w-full h-full border-none hidden absolute inset-0"></iframe>
+                        <div id="gcal-placeholder" class="h-full min-h-[380px] flex flex-col items-center justify-center p-6 text-center text-neutral-500">
                             <i class="fa-solid fa-calendar-plus text-4xl mb-3 text-neutral-700"></i>
                             <p class="text-xs max-w-xs text-neutral-400">Paste your Google Calendar iframe URL above to display your calendar here.</p>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
+
     </main>
 
     <!-- MODAL: ADD TIMER -->
