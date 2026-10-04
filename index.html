@@ -49,7 +49,6 @@
             border-color: #ef4444 !important;
             background-color: rgba(239, 68, 68, 0.15) !important;
         }
-        /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -72,9 +71,8 @@
     <header class="w-full bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-6 mb-4 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
         <!-- Time & Date with Penguin Icon -->
         <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-            <div class="p-3 bg-gradient-to-tr from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-inner">                 
-                <!-- Free Font Awesome Kiwi Bird Icon -->                 
-                <i class="fa-solid fa-kiwi-bird text-3xl text-cyan-400"></i>             
+            <div class="p-3 bg-gradient-to-tr from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center shadow-inner">     
+                <i class="fa-solid fa-penguin text-3xl text-cyan-400"></i>     
             </div>
             <div>
                 <div id="clock-display" class="font-mono text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-none">
@@ -107,7 +105,7 @@
         <!-- LEFT COLUMN: RECIPE CARD & CALENDAR (6 Cols) -->
         <section class="lg:col-span-6 flex flex-col gap-5">
             
-            <!-- MAGGIE'S RECIPE BOOK CARD (LAUNCH DIRECTLY) -->
+            <!-- MAGGIE'S RECIPE BOOK CARD -->
             <div class="bg-gradient-to-br from-neutral-900 to-neutral-900/90 border border-emerald-500/30 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between">
                 <div class="absolute -right-6 -bottom-6 opacity-10 text-emerald-400 pointer-events-none">
                     <i class="fa-solid fa-book-open text-9xl"></i>
@@ -137,27 +135,28 @@
                 </div>
             </div>
 
-            <!-- GOOGLE CALENDAR & SCHEDULE CARD -->
-            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col min-h-[300px]">
+            <!-- GOOGLE CALENDAR CARD -->
+            <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 md:p-5 shadow-xl flex-1 flex flex-col min-h-[350px]">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-calendar-days text-cyan-400 text-lg"></i>
-                        <h2 class="text-lg font-bold text-neutral-100">Schedule & Calendar</h2>
+                        <h2 class="text-lg font-bold text-neutral-100">Google Calendar</h2>
                     </div>
+                </div>
 
-                <!-- GOOGLE EMBED TAB CONTENT -->
-                <div id="calendar-embed-content" class="hidden flex-1 flex flex-col">
+                <!-- GOOGLE EMBED CONTAINER (VISIBILITY FIXED) -->
+                <div id="calendar-embed-content" class="flex-1 flex flex-col">
                     <div class="mb-2">
                         <div class="flex gap-2">
-                            <input type="text" id="gcal-url-input" placeholder="Paste Google Calendar Embed URL..." class="flex-1 bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-cyan-500">
-                            <button onclick="saveGCalUrl()" class="bg-cyan-600 hover:bg-cyan-500 text-neutral-950 font-semibold px-3 py-1.5 rounded-xl text-xs">Save</button>
+                            <input type="text" id="gcal-url-input" placeholder="Paste Google Calendar Embed URL (e.g. https://calendar.google.com/calendar/embed?...)" class="flex-1 bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-cyan-500">
+                            <button onclick="saveGCalUrl()" class="bg-cyan-600 hover:bg-cyan-500 text-neutral-950 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition-colors">Save</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-neutral-950 rounded-xl overflow-hidden border border-neutral-800 min-h-[180px]">
+                    <div class="flex-1 bg-neutral-950 rounded-xl overflow-hidden border border-neutral-800 min-h-[220px]">
                         <iframe id="gcal-iframe" src="" class="w-full h-full border-none hidden"></iframe>
-                        <div id="gcal-placeholder" class="h-full flex flex-col items-center justify-center p-4 text-center text-neutral-500">
-                            <i class="fa-solid fa-calendar-plus text-3xl mb-2 text-neutral-700"></i>
-                            <p class="text-xs max-w-xs">Paste your public Google Calendar iframe URL above to embed your live Google calendar here.</p>
+                        <div id="gcal-placeholder" class="h-full min-h-[200px] flex flex-col items-center justify-center p-6 text-center text-neutral-500">
+                            <i class="fa-solid fa-calendar-plus text-4xl mb-3 text-neutral-700"></i>
+                            <p class="text-xs max-w-xs text-neutral-400">Paste your Google Calendar iframe URL above to display your calendar here.</p>
                         </div>
                     </div>
                 </div>
@@ -226,91 +225,117 @@
     </div>
 
     <script>
+        // --- iOS / MOBILE WEB AUDIO UNLOCK ---
+        let audioCtx = null;
+        function unlockAudio() {
+            if (!audioCtx) {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtxClass) {
+                    audioCtx = new AudioCtxClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (audioCtx) {
+                try {
+                    const buffer = audioCtx.createBuffer(1, 1, 22050);
+                    const source = audioCtx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(audioCtx.destination);
+                    source.start(0);
+                } catch(e) {}
+            }
+        }
+        document.addEventListener('touchstart', unlockAudio, { once: true });
+        document.addEventListener('click', unlockAudio, { once: true });
+
         // --- 1. CLOCK & DATE LOGIC (24-HOUR FORMAT) ---
         function updateClockAndDate() {
             const now = new Date();
-            
-            // 24-Hour time formatting: HH:mm:ss
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             document.getElementById('clock-display').innerText = `${hours}:${minutes}:${seconds}`;
 
-            // Date formatting: "Sunday, Oct 4, 2026"
             const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
             document.getElementById('date-display').innerText = now.toLocaleDateString('en-US', options);
         }
         setInterval(updateClockAndDate, 1000);
         updateClockAndDate();
 
-        // Weather Refresh Simulator
+        // Weather Simulator
         function refreshWeather() {
             const temps = [68, 70, 72, 74, 75];
             const randomTemp = temps[Math.floor(Math.random() * temps.length)];
             document.getElementById('weather-temp').innerText = `${randomTemp}°F`;
         }
 
-        // --- 2. MULTI-TIMER SYSTEM LOGIC ---
+        // --- 2. MULTI-TIMER SYSTEM (TIMESTAMP-BASED FOR ACCURACY) ---
         let timers = [
-            { id: '1', label: 'Kitchen Timer', totalSeconds: 300, remainingSeconds: 300, state: 'paused' }
+            { id: '1', label: 'Kitchen Timer', totalSeconds: 300, remainingSeconds: 300, endTime: null, state: 'paused' }
         ];
 
         let timerInterval = null;
 
         function initTimerEngine() {
             if (!timerInterval) {
-                timerInterval = setInterval(tickTimers, 1000);
+                timerInterval = setInterval(tickTimers, 500);
             }
             renderTimers();
         }
 
         function tickTimers() {
             let stateChanged = false;
+            const now = Date.now();
+
             timers.forEach(t => {
                 if (t.state === 'running') {
-                    if (t.remainingSeconds > 0) {
-                        t.remainingSeconds--;
+                    if (t.endTime) {
+                        const msLeft = t.endTime - now;
+                        t.remainingSeconds = Math.max(0, Math.ceil(msLeft / 1000));
                         stateChanged = true;
-                    } else {
-                        t.state = 'alarm';
-                        playAlarmSound();
-                        stateChanged = true;
+
+                        if (t.remainingSeconds <= 0) {
+                            t.state = 'alarm';
+                            t.endTime = null;
+                            playAlarmSound();
+                            if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+                        }
                     }
                 }
             });
+
             if (stateChanged || timers.length > 0) {
                 renderTimers();
             }
         }
 
         function playAlarmSound() {
-            // Web Audio API Synth Alarm Beep
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                
-                const playBeep = (freq, duration, delay) => {
-                    setTimeout(() => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-                        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start();
-                        osc.stop(ctx.currentTime + duration);
-                    }, delay);
-                };
+            unlockAudio();
+            if (audioCtx) {
+                try {
+                    const playBeep = (freq, duration, delay) => {
+                        setTimeout(() => {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.start();
+                            osc.stop(audioCtx.currentTime + duration);
+                        }, delay);
+                    };
 
-                // Play alarm chime pattern
-                playBeep(880, 0.2, 0);
-                playBeep(880, 0.2, 250);
-                playBeep(1046.5, 0.4, 500);
-            } catch(e) {
-                console.log('Audio playback restricted', e);
+                    playBeep(880, 0.2, 0);
+                    playBeep(880, 0.2, 250);
+                    playBeep(1046.5, 0.4, 500);
+                } catch(e) {
+                    console.log('Audio error:', e);
+                }
             }
         }
 
@@ -350,7 +375,6 @@
                 return `
                     <div class="bg-neutral-950 border ${isAlarm ? 'alarm-active' : 'border-neutral-800'} p-4 rounded-xl flex items-center justify-between gap-3 transition-all">
                         <div class="flex items-center gap-3">
-                            <!-- Circular Progress -->
                             <div class="relative w-12 h-12 flex items-center justify-center flex-shrink-0">
                                 <svg class="w-12 h-12 transform -rotate-90">
                                     <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="3" class="text-neutral-800" fill="transparent" />
@@ -364,7 +388,6 @@
                                 <i class="fa-solid ${isAlarm ? 'fa-bell text-red-500 text-base' : (t.state === 'running' ? 'fa-play text-orange-400 text-xs' : 'fa-pause text-amber-400 text-xs')} absolute"></i>
                             </div>
 
-                            <!-- Label & Display -->
                             <div>
                                 <div class="flex items-center gap-2">
                                     <span class="text-sm font-semibold text-neutral-200">${t.label}</span>
@@ -376,11 +399,10 @@
                             </div>
                         </div>
 
-                        <!-- Timer Controls -->
                         <div class="flex items-center gap-1.5">
                             ${isAlarm ? `
                                 <button onclick="dismissAlarm('${t.id}')" class="bg-red-500 hover:bg-red-600 text-neutral-950 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1">
-                                    <i class="fa-solid fa-check"></i> Stop Alarm
+                                    <i class="fa-solid fa-check"></i> Stop
                                 </button>
                             ` : `
                                 ${t.state === 'running' ? `
@@ -392,10 +414,10 @@
                                         <i class="fa-solid fa-play text-sm"></i>
                                     </button>
                                 `}
-                                <button onclick="resetTimer('${t.id}')" class="p-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-400 rounded-xl text-xs" title="Reset Timer">
+                                <button onclick="resetTimer('${t.id}')" class="p-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-400 rounded-xl text-xs" title="Reset">
                                     <i class="fa-solid fa-rotate-left text-sm"></i>
                                 </button>
-                                <button onclick="deleteTimer('${t.id}')" class="p-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-500 hover:text-red-400 rounded-xl text-xs" title="Delete Timer">
+                                <button onclick="deleteTimer('${t.id}')" class="p-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-500 hover:text-red-400 rounded-xl text-xs" title="Delete">
                                     <i class="fa-solid fa-trash text-sm"></i>
                                 </button>
                             `}
@@ -406,12 +428,15 @@
         }
 
         function toggleTimerState(id) {
+            unlockAudio();
             const timer = timers.find(t => t.id === id);
             if (timer) {
                 if (timer.state === 'running') {
                     timer.state = 'paused';
+                    timer.endTime = null;
                 } else if (timer.remainingSeconds > 0) {
                     timer.state = 'running';
+                    timer.endTime = Date.now() + (timer.remainingSeconds * 1000);
                 }
                 renderTimers();
             }
@@ -422,6 +447,7 @@
             if (timer) {
                 timer.remainingSeconds = timer.totalSeconds;
                 timer.state = 'paused';
+                timer.endTime = null;
                 renderTimers();
             }
         }
@@ -436,11 +462,13 @@
             if (timer) {
                 timer.remainingSeconds = timer.totalSeconds;
                 timer.state = 'paused';
+                timer.endTime = null;
                 renderTimers();
             }
         }
 
         function openAddTimerModal() {
+            unlockAudio();
             document.getElementById('add-timer-modal').classList.remove('hidden');
         }
 
@@ -449,6 +477,7 @@
         }
 
         function createNewTimer() {
+            unlockAudio();
             const label = document.getElementById('new-timer-label').value.trim() || 'Kitchen Timer';
             const hrs = parseInt(document.getElementById('new-timer-hrs').value) || 0;
             const mins = parseInt(document.getElementById('new-timer-mins').value) || 0;
@@ -462,6 +491,7 @@
                 label: label,
                 totalSeconds: total,
                 remainingSeconds: total,
+                endTime: Date.now() + (total * 1000),
                 state: 'running'
             });
 
@@ -470,8 +500,7 @@
             document.getElementById('new-timer-label').value = '';
         }
 
-        // --- 3. GOOGLE CALENDAR & SCHEDULE LOGIC ---
-
+        // --- 3. GOOGLE CALENDAR LOGIC ---
         function saveGCalUrl() {
             const url = document.getElementById('gcal-url-input').value.trim();
             const iframe = document.getElementById('gcal-iframe');
@@ -481,13 +510,27 @@
                 iframe.src = url;
                 iframe.classList.remove('hidden');
                 placeholder.classList.add('hidden');
+                localStorage.setItem('kitchen_hub_gcal_url', url);
             } else {
                 iframe.classList.add('hidden');
                 placeholder.classList.remove('hidden');
+                localStorage.removeItem('kitchen_hub_gcal_url');
             }
         }
 
+        function loadSavedGCalUrl() {
+            const savedUrl = localStorage.getItem('kitchen_hub_gcal_url');
+            if (savedUrl) {
+                document.getElementById('gcal-url-input').value = savedUrl;
+                saveGCalUrl();
+            }
+        }
 
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initTimerEngine();
+            loadSavedGCalUrl();
+        });
     </script>
 </body>
 </html>
